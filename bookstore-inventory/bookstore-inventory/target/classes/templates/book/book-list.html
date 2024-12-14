@@ -1,0 +1,72 @@
+<html   xmlns:th="http://www.thymeleaf.org">
+ <body class='bgi'>
+  <form>
+  <div th:insert="/top"></div>
+  <div class='container'>
+  <div class='card'>
+  <div class='card-header'>
+     <table style='width:95%'>
+      <tr>
+       <td style='width:40%'>
+        <label style='font-size:2vw' th:text="${pn+' of '+tp}"></label>
+       </td>
+       <td>
+        <a class='an' th:if="${pn>5}" th:href='@{manage(pn=${pn-1})}'>Prev</a>
+       	<a th:class='${pn==c?"anc":"an"}' th:if="${tp<=5}" th:href='@{manage(pn=${c})}' th:each="c:${#numbers.sequence( 1,tp,1)}" th:text="${c}"></a>
+       	<a th:class='${pn==c?"anc":"an"}' th:if="${tp>5 and pn<=5}" th:href='@{manage(pn=${c})}' th:each="c:${#numbers.sequence( 1,5,1)}" th:text="${c}"></a>
+       	<a th:class='${pn==c?"anc":"an"}' th:if="${pn>5}" th:href='@{manage(pn=${c})}' th:each="c:${#numbers.sequence( 1,4,1)}" th:text="${c}"></a>
+       	<label th:if="${pn>5}" style='font-size:2.5vw;margin-left:1vw'>. . . </label>
+       	<a class='anc' th:if="${pn>5}" th:href='@{manage(pn=${pn})}' th:text="${pn}"></a>
+       	<a class='an' th:if="${tp>5}" th:href='@{manage(pn=${pn+1})}' th:onclick="|return ${pn<tp}|">Next</a>
+       </td>
+      </tr>
+     </table>
+  </div>
+  <div class='card-body'>
+  <div class='dvv' th:if="${blist.empty}">
+    <label class='lah' style='color:green'>Sorry no book</label>
+  </div>
+  <div th:if="${!blist.empty}">
+  <table class='table'>
+   <thead>
+    <tr>
+     <th class='tdr'>Book Id</th>
+     <th class='tdr'>Title</th>
+     <th class='tdr'>Author</th>
+     <th class='tdr'>Cat Id</th>
+     <th class='tdr'>Pub Id</th>
+     <th class='tdr'>Copies</th>
+     <th class='tdr'>Price</th>
+     <th class='tdr'>Stock</th>
+     <th class='tdr' style='color:magenta'>Action</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr th:each="book:${blist}">
+     <td class='tdr' th:text="${book.bookid}"></td>
+     <td class='tdr' th:text="${book.title}"></td>
+     <td class='tdr' th:text="${book.author}"></td>
+     <td class='tdr'><a th:href='@{/bookstore/inventory/category/details(cid=${book.catid})}' th:text="${book.catid}" title='Click to see category details'></a></td>
+     <td class='tdr'><a href='#' th:text="${book.pubid}"  title='Click to see publisher details'></a></td>
+     <td class='tdr' th:text="${book.copies}"></td>
+     <td class='tdr' th:text="${'&#8377;'+book.price}"></td>
+     <td class='tdr' th:if="${book.copies>0}" style='color:green'>In Stock</td>
+     <td class='tdr' th:if="${book.copies==0}" style='color:red'>Out of Stock</td>
+     <td class='tdr'>
+      <a th:href="@{edit(bid=${book.bookid})}">Edit |</a>
+      <a th:href="@{remove(bid=${book.bookid})}" onclick='return confirm("Are you sure to remove?")'>Remove</a> 
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  </div>
+  </div>
+  </div>
+   <div class='dvv'>
+     <a class='btl' href='add'>Add new book</a>
+     <a class='btl' href='/bookstore/inventory/home' style='background-color:orange'>Back</a>
+  </div>
+  </div>
+  </form>
+ </body>
+ </html>
